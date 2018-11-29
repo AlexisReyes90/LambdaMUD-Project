@@ -11,6 +11,11 @@ import json
 # instantiate pusher
 pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
 
+
+# if it finds and puts the uuid in a json, that means this finds the token and returns that user data
+# gets additional information [player current room]
+# the uuid for use in pusher?
+
 @csrf_exempt
 @api_view(["GET"])
 def initialize(request):
@@ -21,6 +26,10 @@ def initialize(request):
     room = player.room()
     players = room.playerNames(player_id)
     return JsonResponse({'uuid': uuid, 'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players}, safe=True)
+
+# Finds the direction/ room the player goes to
+# If initialized in a room, returns current room/ otherwise returns the next room the user entered
+# uses uuid for pusher to update pusher that user entered another room
 
 
 # @csrf_exempt
@@ -58,6 +67,9 @@ def move(request):
     else:
         players = room.playerNames(player_uuid)
         return JsonResponse({'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players, 'error_msg':"You cannot move that way."}, safe=True)
+
+# gives a json obj (response) that contains a message given by the user
+# must tell pusher that a user sent a message
 
 
 @csrf_exempt
