@@ -147,6 +147,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+DATABASES = {}
+
 DATABASES['default'] = dj_database_url.config(default=config('DATABASE_URL'), conn_max_age=600)
 
 # Static files (CSS, JavaScript, Images)
